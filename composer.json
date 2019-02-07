@@ -2,6 +2,9 @@
 	"name": "dimaxz/activetable",
 	"description": "ActiveTable Engine, grid+form",
 	"minimum-stability": "dev",
+	"require": {
+        "php": "^7.2"
+    },
 	"autoload": {
 		"psr-4": {
 			"ActiveTableEngine\\": "src"
