@@ -1,0 +1,10 @@
+{
+	"name": "dimaxz/activetable",
+	"description": "ActiveTable Engine, grid+form",
+	"minimum-stability": "dev",
+	"autoload": {
+		"psr-4": {
+			"ActiveTableEngine\\": "src"
+		}
+	}
+}
