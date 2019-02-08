@@ -114,6 +114,13 @@ class DataTableSimple {
 	}
 
 	/**
+	 * @return FormRenderingInterface
+	 */
+	public function getFormDriver():FormRenderingInterface{
+		return $this->form;
+	}
+
+	/**
 	 * Установка объекта для фильтрации для репозитория
 	 * @param $criteria
 	 *

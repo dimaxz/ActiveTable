@@ -25,5 +25,5 @@ interface CrudRepositoryInterface {
 
 	public static function createEntity():AbstractEntity;
 
-	public static function buildOrderFromArray(array $row);
+	public static function buildEntityFromArray(array $row);
 }
