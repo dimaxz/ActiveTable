@@ -121,6 +121,13 @@ class DataTableSimple {
 	}
 
 	/**
+	 * @return TableRenderingInterface
+	 */
+	public function getTableDriver():TableRenderingInterface{
+		return $this->table;
+	}
+
+	/**
 	 * Установка объекта для фильтрации для репозитория
 	 * @param $criteria
 	 *
@@ -167,6 +174,7 @@ class DataTableSimple {
 					$this->action->call(EventName::ON_CREATE);
 					$this->action->call(EventName::AFTER_CREATE);
 				} catch(Exceptions\ActionError $ex) {
+
 					$this->action->call(EventName::BEFORE_FORM_RENDER);
 					$this->output->addContent($this->renderForm());
 				}

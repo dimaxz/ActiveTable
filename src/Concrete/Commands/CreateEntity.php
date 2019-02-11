@@ -37,6 +37,7 @@ class CreateEntity implements ActionInterface {
 			$this->repository->save($model);
 			$this->content->addContent("Успешно сохранено");
 		}catch (ValidationException $ex){
+
 			$this->content->addContent("Не заполнены обязательные поля");
 		}
 
