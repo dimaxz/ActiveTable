@@ -13,6 +13,8 @@ use ActiveTableEngine\Contracts\FormRenderingInterface;
 
 class DataTableSimple {
 
+	const BUTT = "";
+	
 	protected $fieldsWidth;
 
 	protected $repo;
@@ -41,6 +43,7 @@ class DataTableSimple {
 
 	protected $action;
 	protected $output;
+	protected $name;
 
 	/**
 	 * DataTableSimple constructor.
@@ -56,6 +59,15 @@ class DataTableSimple {
 		$this->searchCriteria = new Concrete\Navigation();
 		$this->output = new Concrete\ContentOutput();
 		$this->action = new Concrete\ActionHandler();
+		$this->name = $name;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName():string{
+
+		return $this->name;
 	}
 
 	/**
@@ -224,7 +236,10 @@ class DataTableSimple {
 
 			default:
 
+				$this->action->call(EventName::BEFORE_TABLE);
+				$this->action->call(EventName::BEFORE_TABLE_RENDER);
 				$this->output->addContent($this->renderTable());
+				$this->action->call(EventName::AFTER_TABLE);
 
 				//$hiddenFilter = false;
 
@@ -379,12 +394,13 @@ class DataTableSimple {
 		return $this;
 	}
 
+
 	/**
 	 * Получение массива фильтров
 	 * @todo вместо сложного массива класс-структура
 	 * @return array
 	 */
-	protected function getFilters():array{
+	public function getFilters():array{
 
 		$filters = [];
 
