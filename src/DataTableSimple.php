@@ -348,6 +348,9 @@ class DataTableSimple {
 
 		$fields = [];
 
+		$data = $this->output->getData();
+
+		
 		foreach($this->fields as $name => $field){
 
 			if(isset($this->filterFieldsCaptions[$name]) && !empty($this->filterFieldsCaptions[$name])){
@@ -361,7 +364,6 @@ class DataTableSimple {
 			}
 
 
-			$data = $this->output->getData();
 
 			if(isset($data[$name])){
 				$field->setValue($data[$name]);
