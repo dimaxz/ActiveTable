@@ -348,9 +348,8 @@ class DataTableSimple {
 
 		$fields = [];
 
-		$data = $this->output->getData();
+		$data = array_change_key_case($this->output->getData());
 
-		
 		foreach($this->fields as $name => $field){
 
 			if(isset($this->filterFieldsCaptions[$name]) && !empty($this->filterFieldsCaptions[$name])){
@@ -362,8 +361,6 @@ class DataTableSimple {
 			else{
 				$caption = $name;
 			}
-
-
 
 			if(isset($data[$name])){
 				$field->setValue($data[$name]);
