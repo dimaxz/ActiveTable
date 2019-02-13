@@ -350,6 +350,7 @@ class DataTableSimple {
 
 		$data = array_change_key_case($this->output->getData());
 
+
 		foreach($this->fields as $name => $field){
 
 			if(isset($this->filterFieldsCaptions[$name]) && !empty($this->filterFieldsCaptions[$name])){
@@ -363,6 +364,7 @@ class DataTableSimple {
 			}
 
 			if(isset($data[$name])){
+				
 				$field->setValue($data[$name]);
 			}
 
@@ -524,9 +526,10 @@ class DataTableSimple {
 	 * @return $this
 	 */
 	public function addField(FormControlRenderInterface $control, $req = false, $caption = false) {
-		$this->fields[$control->getName()] = $control;
-		$this->reqFields[$control->getName()] = $req;
-		$this->filterFieldsCaptions[$control->getName()] = $caption;
+		$name = strtolower($control->getName());
+		$this->fields[$name] = $control;
+		$this->reqFields[$name] = $req;
+		$this->filterFieldsCaptions[$name] = $caption;
 		return $this;
 	}
 
@@ -538,8 +541,9 @@ class DataTableSimple {
 	 * @return $this
 	 */
 	public function addFilter(FormControlRenderInterface $control, $caption = false) {
-		$this->filterFields[$control->getName()] = $control;
-		$this->filterFieldsCaptions[$control->getName()] = $caption;
+		$name = strtolower($control->getName());
+		$this->filterFields[$name] = $control;
+		$this->filterFieldsCaptions[$name] = $caption;
 		return $this;
 	}
 
@@ -552,8 +556,9 @@ class DataTableSimple {
 	 * @return $this
 	 */
 	public function addAction(FormControlRenderInterface $control, $caption = null) {
-		$this->actionFields[$control->getName()] = $control;
-		$this->actionFieldsCaptions[$control->getName()] = $caption;
+		$name = strtolower($control->getName());
+		$this->actionFields[$name] = $control;
+		$this->actionFieldsCaptions[$name] = $caption;
 		return $this;
 	}
 
@@ -566,8 +571,9 @@ class DataTableSimple {
 	 * @return $this
 	 */
 	public function addActionSelect(FormControlRenderInterface $control, $caption = null) {
-		$this->actionSelectFields[$control->getName()] = $control;
-		$this->actionSelectCaptions[$control->getName()] = $caption;
+		$name = strtolower($control->getName());
+		$this->actionSelectFields[$name] = $control;
+		$this->actionSelectCaptions[$name] = $caption;
 		return $this;
 	}
 
@@ -579,8 +585,9 @@ class DataTableSimple {
 	 * @return $this
 	 */
 	public function addColumn(ColumnTableInterface $column){
-		$this->columns[$column->getName()]  = $column;
-		$this->columnCaptions[$column->getName()] = $column->getCaption();
+		$name = strtolower($column->getName());
+		$this->columns[$name]  = $column;
+		$this->columnCaptions[$name] = $column->getCaption();
 		return $this;
 	}
 
