@@ -348,8 +348,7 @@ class DataTableSimple {
 
 		$fields = [];
 
-		$data = array_change_key_case($this->output->getData());
-
+		$data = $this->output->getData();
 
 		foreach($this->fields as $name => $field){
 
@@ -364,7 +363,7 @@ class DataTableSimple {
 			}
 
 			if(isset($data[$name])){
-				
+
 				$field->setValue($data[$name]);
 			}
 
