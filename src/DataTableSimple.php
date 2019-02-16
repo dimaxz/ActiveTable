@@ -443,19 +443,22 @@ class DataTableSimple {
 	 */
 	protected function prepareSortingHeader(array $header){
 		$sorted = [];
+
+		$getData = array_change_key_case($_GET);
+		
 		foreach ($this->columns as $column){
 
 			$name = $column->getName();
 
 			if($column->isSorted()===true){
-				$name = sprintf("sort_by_%s", $column->getName());
+				$name = strtolower(sprintf("sort_by_%s", $column->getName()));
 
 				$sorted[$column->getName()] = "";
 
-				if(isset($_GET[$name]) && $_GET[$name]=="desc"){
+				if(isset($getData[$name]) && $getData[$name]=="desc"){
 					$sorted[$column->getName()] = "DESC";
 				}
-				elseif(isset($_GET[$name]) && $_GET[$name]=="asc"){
+				elseif(isset($getData[$name]) && $getData[$name]=="asc"){
 					$sorted[$column->getName()] = "ASC";
 				}
 
