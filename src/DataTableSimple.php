@@ -45,6 +45,8 @@ class DataTableSimple {
 	protected $output;
 	protected $name;
 
+	protected $defaultAction = "";
+
 	/**
 	 * DataTableSimple constructor.
 	 *
@@ -60,6 +62,16 @@ class DataTableSimple {
 		$this->output = new Concrete\ContentOutput();
 		$this->action = new Concrete\ActionHandler();
 		$this->name = $name;
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return $this
+	 */
+	public function setDefaultAction(string $name){
+		$this->defaultAction = $name;
+		return $this;
 	}
 
 	/**
@@ -234,6 +246,12 @@ class DataTableSimple {
 
 				break;
 
+			case !empty($this->defaultAction):
+
+				$this->action->call($this->defaultAction);
+
+				break;
+
 			default:
 
 				$this->action->call(EventName::BEFORE_TABLE);
@@ -295,7 +313,7 @@ class DataTableSimple {
 
 
 			default:
-				return "";
+				return $this->defaultAction;
 				break;
 		}
 
@@ -562,6 +580,43 @@ class DataTableSimple {
 		$this->actionFields[$name] = $control;
 		$this->actionFieldsCaptions[$name] = $caption;
 		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getActions(): array {
+
+		$actions = [];
+
+		foreach ($this->actionFields as $name => $actionField) {
+
+			if(isset($this->actionFieldsCaptions[$name]) && !empty($this->actionFieldsCaptions[$name])){
+				$caption = $this->actionFieldsCaptions[$name];
+			}
+			elseif(isset($this->columnCaptions[$name]) && !empty($this->columnCaptions[$name])){
+				$caption = $this->columnCaptions[$name];
+			}
+			else{
+				$caption = $name;
+			}
+
+
+			$actions[$name] = [
+				$caption,
+				$this->renderControl($actionField),
+				$actionField
+			];
+		}
+
+		return $actions;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getSelectActions(): array {
+		return $this->actionSelectFields;
 	}
 
 	/**
