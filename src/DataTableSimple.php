@@ -527,9 +527,9 @@ class DataTableSimple {
 				else{
 					$row[$name] = $model->{"get" . $name}();
 				}
-                $rows[]=$row;
-			}
 
+			}
+            $rows[]=$row;
 		}
 
 		$this->rows = $rows;
