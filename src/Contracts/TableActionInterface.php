@@ -2,6 +2,8 @@
 
 namespace ActiveTableEngine\Contracts;
 
+use Repo\PaginationInterface;
+
 /**
  * Комплексный интерфейс включающий в себя и навигацию и слушатель действий
  *

@@ -6,7 +6,7 @@ namespace ActiveTableEngine;
 use ActiveTableEngine\Contracts\ActionInterface;
 use ActiveTableEngine\Contracts\ColumnTableInterface;
 use ActiveTableEngine\Contracts\FormControlRenderInterface;
-use ActiveTableEngine\Contracts\CrudRepositoryInterface;
+use Repo\CrudRepositoryInterface;
 use ActiveTableEngine\Contracts\OutputInterface;
 use ActiveTableEngine\Contracts\TableRenderingInterface;
 use ActiveTableEngine\Contracts\FormRenderingInterface;
@@ -53,7 +53,7 @@ class DataTableSimple {
 	 * @param $repo
 	 * @param $name
 	 */
-	function __construct(CrudRepositoryInterface $repo,$name) {
+	function __construct(\Repo\CrudRepositoryInterface $repo,$name) {
 		$this->repo = $repo;
 		$this->actionRequest = new Concrete\TableAction();
 		$this->table = new Concrete\EasyTable($name,$this->actionRequest);
@@ -527,9 +527,9 @@ class DataTableSimple {
 				else{
 					$row[$name] = $model->{"get" . $name}();
 				}
-
+                $rows[]=$row;
 			}
-			$rows[]=$row;
+
 		}
 
 		$this->rows = $rows;

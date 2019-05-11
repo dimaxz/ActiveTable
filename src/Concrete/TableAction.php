@@ -10,73 +10,102 @@ namespace ActiveTableEngine\Concrete;
 
 use ActiveTableEngine\Contracts\TableActionInterface;
 
-class TableAction extends  Navigation implements TableActionInterface {
+class TableAction extends Navigation implements TableActionInterface
+{
 
 
-	/**
-	 * просмотр записи
-	 * @return bool
-	 */
-	public function isViewRecord(): bool{
-		return $_GET["fn"]==="edit" && (int)$_GET["id"] > 0;
-	}
+    /**
+     * просмотр записи
+     * @return bool
+     */
+    public function isViewRecord(): bool
+    {
 
-	/**
-	 * Просмотр пустой формы
-	 * @return bool
-	 */
-	public function isViewForm(): bool{
-		return $_GET["fn"]==="add" && (int)$_GET["id"] == 0;
-	}
+        if (!isset($_GET["fn"]) || !isset($_GET["id"])) {
+            return false;
+        }
 
-	/**
-	 * удаление записи
-	 * @return bool
-	 */
-	public function isDeleteRecord(): bool{
-		return $_GET["fn"]==="del" && (int)$_GET["id"] > 0;
-	}
+        return $_GET["fn"] === "edit" && (int)$_GET["id"] > 0;
+    }
 
-	/**
-	 * Обновление записи
-	 * @return bool
-	 */
-	public function isUpdateRecord() :bool{
-		return $this->isViewRecord() && $this->isSubmitForm();
-	}
+    /**
+     * Просмотр пустой формы
+     * @return bool
+     */
+    public function isViewForm(): bool
+    {
+        if (!isset($_GET["fn"]) || !isset($_GET["id"])) {
+            return false;
+        }
+        return $_GET["fn"] === "add" && (int)$_GET["id"] == 0;
+    }
 
-	/**
-	 * Создание записи
-	 * @return bool
-	 */
-	public function isCreateRecord() :bool{
-		return $this->isViewForm() && $this->isSubmitForm();
-	}
+    /**
+     * удаление записи
+     * @return bool
+     */
+    public function isDeleteRecord(): bool
+    {
+        if (!isset($_GET["fn"]) || !isset($_GET["id"])) {
+            return false;
+        }
+        return $_GET["fn"] === "del" && (int)$_GET["id"] > 0;
+    }
 
-	/**
-	 * Подтвержденгие формы
-	 * @return bool
-	 */
-	protected function isSubmitForm():bool{
-		return isset($_POST["submit"]);
-	}
+    /**
+     * Обновление записи
+     * @return bool
+     */
+    public function isUpdateRecord(): bool
+    {
+        return $this->isViewRecord() && $this->isSubmitForm();
+    }
 
-	/**
-	 * присутсвие ключа
-	 * @return int
-	 */
-	public function getKey(): int {
-		return (int)$_GET["id"];
-	}
+    /**
+     * Создание записи
+     * @return bool
+     */
+    public function isCreateRecord(): bool
+    {
+        return $this->isViewForm() && $this->isSubmitForm();
+    }
 
-	/**
-	 * получение базового УРЛ
-	 * @param $url
-	 *
-	 * @return string
-	 */
-	public function getBaseUrl(): string {
-		return rtrim( str_replace(  $_SERVER["QUERY_STRING"],"",$_SERVER["REQUEST_URI"] ) , "?");
-	}
+    /**
+     * Подтвержденгие формы
+     * @return bool
+     */
+    protected function isSubmitForm(): bool
+    {
+        if (!isset($_GET["submit"])) {
+            return false;
+        }
+        return isset($_POST["submit"]);
+    }
+
+    /**
+     * присутсвие ключа
+     * @return int
+     */
+    public function getKey(): int
+    {
+        if (!isset($_GET["id"])) {
+            return false;
+        }
+        return (int)$_GET["id"];
+    }
+
+    /**
+     * получение базового УРЛ
+     * @param $url
+     *
+     * @return string
+     */
+    public function getBaseUrl(): string
+    {
+        if(!isset($_SERVER["QUERY_STRING"])){
+            return "";
+        }
+        return rtrim(str_replace($_SERVER["QUERY_STRING"], "", $_SERVER["REQUEST_URI"]), "?");
+    }
 
 }

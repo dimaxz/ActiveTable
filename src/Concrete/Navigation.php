@@ -8,7 +8,7 @@
 
 namespace ActiveTableEngine\Concrete;
 
-use ActiveTableEngine\Contracts\PaginationInterface;
+use Repo\PaginationInterface;
 
 class Navigation implements PaginationInterface {
 

@@ -9,7 +9,7 @@
 namespace ActiveTableEngine\Concrete\Commands;
 
 use ActiveTableEngine\Contracts\ActionInterface;
-use ActiveTableEngine\Contracts\CrudRepositoryInterface;
+use Repo\CrudRepositoryInterface;
 use ActiveTableEngine\Contracts\OutputInterface;
 use Infrastructure\Repositories\ValidationException;
 

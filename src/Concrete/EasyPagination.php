@@ -8,8 +8,8 @@
 
 namespace ActiveTableEngine\Concrete;
 
-use ActiveTableEngine\Contracts\CrudRepositoryInterface;
-use ActiveTableEngine\Contracts\PaginationInterface;
+use Repo\CrudRepositoryInterface;
+use Repo\PaginationInterface;
 use ActiveTableEngine\Contracts\PaginationRenderInterface;
 
 class EasyPagination implements PaginationRenderInterface {

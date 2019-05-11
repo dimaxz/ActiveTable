@@ -3,7 +3,7 @@
 namespace ActiveTableEngine\Concrete\Commands;
 
 use ActiveTableEngine\Concrete\ContentOutput;
-use ActiveTableEngine\Contracts\CrudRepositoryInterface;
+use Repo\CrudRepositoryInterface;
 use ActiveTableEngine\Contracts\OutputInterface;
 use ActiveTableEngine\Contracts\TableActionInterface;
 
