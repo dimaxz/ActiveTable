@@ -22,3 +22,5 @@ $table->addField( new FormInput("email"));
 dump($table->render());
 
 ```
+
+Пример проекта https://github.com/dimaxz/active-table-project
