@@ -76,7 +76,7 @@ class TableAction extends Navigation implements TableActionInterface
      */
     protected function isSubmitForm(): bool
     {
-        if (!isset($_GET["submit"])) {
+        if (!isset($_POST["submit"])) {
             return false;
         }
         return isset($_POST["submit"]);
