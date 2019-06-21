@@ -34,10 +34,10 @@ class TableAction extends Navigation implements TableActionInterface
      */
     public function isViewForm(): bool
     {
-        if (!isset($_GET["fn"]) || !isset($_GET["id"])) {
+        if (!isset($_GET["fn"])) {
             return false;
         }
-        return $_GET["fn"] === "add" && (int)$_GET["id"] == 0;
+        return $_GET["fn"] === "add" && !isset($_GET["id"]);
     }
 
     /**
