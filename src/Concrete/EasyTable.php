@@ -120,16 +120,20 @@ class EasyTable implements  TableRenderingInterface, TableSortingInterface {
 	 */
 	public function renderTop(array $rows): string {
 
-		$html = sprintf("<form action='%s' name='%s_filter' type='get'><table>", $this->baseUrl, $this->name);
-		foreach ($rows as $k => $row){
-			$html .= "<tr>" . sprintf("<td><label for='%s' >%s</label></td><td>%s</td>",$k,$row[0],$row[1]) . "</tr>" ;
-		}
-		$html .= "</table>";
-		$html .= sprintf(
-			"<br/><button type='submit' >Фильтровать</button>".
-			"<button onclick=\"location.href = '%s';return false;\"/>Сбросить</button>",
-			$this->baseUrl
-		);
+        $html = "";
+        
+	    if(count($rows)){
+            $html = sprintf("<form action='%s' name='%s_filter' type='get'><table>", $this->baseUrl, $this->name);
+            foreach ($rows as $k => $row){
+                $html .= "<tr>" . sprintf("<td><label for='%s' >%s</label></td><td>%s</td>",$k,$row[0],$row[1]) . "</tr>" ;
+            }
+            $html .= "</table>";
+            $html .= sprintf(
+                "<br/><button type='submit' >Фильтровать</button>".
+                "<button onclick=\"location.href = '%s';return false;\"/>Сбросить</button>",
+                $this->baseUrl
+            );
+        }
 
 		return $html . "</form>" .
 			$this->pagination->render() .
