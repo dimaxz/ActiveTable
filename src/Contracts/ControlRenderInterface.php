@@ -6,8 +6,13 @@
  * Time: 11:57
  */
 
-namespace ActiveTableEngine\Contracts;
+namespace ActiveTable\Contracts;
 
+/**
+ * поведение контролов
+ * Interface ControlRenderInterface
+ * @package ActiveTable\Contracts
+ */
 interface ControlRenderInterface {
 
 	public function render() : string;

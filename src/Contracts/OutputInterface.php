@@ -1,6 +1,6 @@
 <?php
 
-namespace ActiveTableEngine\Contracts;
+namespace ActiveTable\Contracts;
 
 /**
  * интерефйс по работы с выводом контента
@@ -8,13 +8,11 @@ namespace ActiveTableEngine\Contracts;
  */
 interface OutputInterface {
 
-	/**
-	 * Добавление контента
-	 * @param string $buffer
-	 *
-	 * @return mixed
-	 */
-	public function addContent(string $buffer);
+    /**
+     * Добавление контента
+     * @param string $buffer
+     */
+	public function addContent(string $buffer): void;
 
 	/**
 	 * Получение контента
@@ -22,16 +20,8 @@ interface OutputInterface {
 	 */
 	public function getContent(): string;
 
-	/**
-	 * @param array $data
-	 *
-	 * @return mixed
-	 */
-	public function setData(array $data);
-
-	/**
-	 * @return array
-	 */
-	public function getData():array;
-
+    /**
+     * Очистка
+     */
+	public function clear(): void;
 }
