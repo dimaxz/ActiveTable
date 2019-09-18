@@ -2,7 +2,15 @@
 
 namespace ActiveTable;
 
+use ActiveTable\Contracts\CommandFactoryInterface;
 use ActiveTable\Contracts\ControlRenderInterface;
+use ActiveTable\EmptyControls\Content;
+use ActiveTable\EmptyControls\TableAction;
+use ActiveTable\EmptyControls\TableBottomControl;
+use ActiveTable\EmptyControls\TableControl;
+use ActiveTable\EmptyControls\TableFilter;
+use ActiveTable\EmptyControls\TableRowAction;
+use ActiveTable\EmptyControls\TableTopControl;
 use Repo\CrudRepositoryInterface;
 
 class DataTableEngine implements ControlRenderInterface
@@ -18,10 +26,13 @@ class DataTableEngine implements ControlRenderInterface
      */
     protected $name;
 
-    function __construct(CrudRepositoryInterface $repo, string $name)
+    protected $commandFactory;
+
+    function __construct(CrudRepositoryInterface $repo, string $name, CommandFactoryInterface $commandFactory)
     {
         $this->repo = $repo;
         $this->name = $name;
+        $this->commandFactory = $commandFactory;
     }
 
     /**
@@ -29,12 +40,11 @@ class DataTableEngine implements ControlRenderInterface
      */
     public function render() : string{
 
-        $command
-            = (new Commands\TableView())
-            ->process();
+        $output = new Content();
 
+        $this->commandFactory->build($output)->process();
 
-        return "dfesjbhjsk";
+        return $output->getContent();
     }
 
 }
