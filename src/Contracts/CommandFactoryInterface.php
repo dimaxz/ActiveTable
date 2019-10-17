@@ -3,6 +3,8 @@
 
 namespace ActiveTable\Contracts;
 
+use ActiveTable\DataTableEngine;
+
 /**
  * Фибрика для создания комманд
  * Interface CommandFactoryInterface
@@ -11,6 +13,15 @@ namespace ActiveTable\Contracts;
 interface CommandFactoryInterface
 {
 
-    public function build(OutputInterface $output): CommandInterface;
+    /**
+     * @param DataTableEngine $output
+     * @return CommandInterface
+     */
+    public function build(DataTableEngine $output): CommandInterface;
+
+    /**
+     * @return string
+     */
+    public function getEventName(): string;
 
 }
