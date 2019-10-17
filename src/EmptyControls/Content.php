@@ -10,7 +10,7 @@ class Content implements OutputInterface
     /**
      * @var string
      */
-    protected $content;
+    protected $content = "";
 
     public function addContent(string $buffer): void
     {
