@@ -3,8 +3,6 @@
 
 namespace ActiveTable;
 
-
-use ActiveTable\Contracts\CommandInterface;
 use ActiveTable\Contracts\FormControlRenderInterface;
 
 class ActionTable

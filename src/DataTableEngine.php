@@ -101,8 +101,8 @@ class DataTableEngine
     protected $controlAccess = [];
 
     const CONTROL_ACCESS_EDIT = "edit";
-    const CONTROL_ACCESS_DELETE= "delete";
-    const CONTROL_ACCESS_ADD= "add";
+    const CONTROL_ACCESS_DELETE = "delete";
+    const CONTROL_ACCESS_ADD = "add";
 
     /**
      * критерия выборки из репо нужна для навигации фильтрации и тд. по сути с ним только работает репозиторий
@@ -130,7 +130,8 @@ class DataTableEngine
     /**
      * @return CommandFactory
      */
-    public function getCommandFactory(): CommandFactory{
+    public function getCommandFactory(): CommandFactory
+    {
         return $this->commandFactory;
     }
 
@@ -155,7 +156,8 @@ class DataTableEngine
     /**
      * формирование комманды
      */
-    private function prepareCommand(): void {
+    private function prepareCommand(): void
+    {
         $this->commandFactory->build($this)->process();
     }
 
@@ -173,9 +175,10 @@ class DataTableEngine
      * @param string $name
      * @return DataTableEngine
      */
-    public function addControlAccess(string $name): DataTableEngine{
-        if(!in_array($name, $this->controlAccess)){
-            $this->controlAccess []= $name;
+    public function addControlAccess(string $name): DataTableEngine
+    {
+        if (!in_array($name, $this->controlAccess)) {
+            $this->controlAccess [] = $name;
         }
 
         return $this;
@@ -185,7 +188,8 @@ class DataTableEngine
      * @param array $names
      * @return DataTableEngine
      */
-    public function setControlAccess(array $names): DataTableEngine{
+    public function setControlAccess(array $names): DataTableEngine
+    {
         $this->controlAccess = $names;
         return $this;
     }
@@ -194,8 +198,9 @@ class DataTableEngine
      * @param string $name
      * @return DataTableEngine
      */
-    public function removeControlAccess(string $name): DataTableEngine{
-        if($key = array_search($this->controlAccess)){
+    public function removeControlAccess(string $name): DataTableEngine
+    {
+        if ($key = array_search($this->controlAccess)) {
             unset($this->controlAccess[$key]);
         }
 
@@ -206,7 +211,8 @@ class DataTableEngine
      * @param string $name
      * @return bool
      */
-    public function hasControlAccess(string $name): bool {
+    public function hasControlAccess(string $name): bool
+    {
         return in_array($name, $this->controlAccess);
     }
 
@@ -261,10 +267,10 @@ class DataTableEngine
     }
 
     /**
-     * @deprecated
+     * @return Content
      * @see self::clearContent
      * @see self::addContent
-     * @return Content
+     * @deprecated
      */
     public function getOutput(): Content
     {
@@ -312,7 +318,8 @@ class DataTableEngine
     /**
      * @param FormControlRenderInterface $field
      */
-    public function addField(FormControlRenderInterface $field, $require  = false, $caption = null): DataTableEngine{
+    public function addField(FormControlRenderInterface $field, $require = false, $caption = null): DataTableEngine
+    {
         $this->fields[] = (new FormField($field))->setRequire($require)->setCaption($caption);
         return $this;
     }
@@ -329,7 +336,8 @@ class DataTableEngine
      * @param FormControlRenderInterface $field
      * @return DataTableEngine
      */
-    public function addFilter(FormControlRenderInterface $field, $caption = null): DataTableEngine{
+    public function addFilter(FormControlRenderInterface $field, $caption = null): DataTableEngine
+    {
         $this->filters[] = (new FilterField($field))->setCaption($caption);
         return $this;
     }
@@ -348,9 +356,10 @@ class DataTableEngine
      * @param string $caption
      * @return DataTableEngine
      */
-    public function addAction(FormControlRenderInterface $control, array $calback, $caption = null): DataTableEngine{
+    public function addAction(FormControlRenderInterface $control, array $calback, $caption = null): DataTableEngine
+    {
 
-        $this->actions[]= (new ActionTable($control,$calback))->setCaption($caption);
+        $this->actions[] = (new ActionTable($control, $calback))->setCaption($caption);
         return $this;
     }
 
@@ -379,8 +388,9 @@ class DataTableEngine
      * @param null $caption
      * @return DataTableEngine
      */
-    public function addRowAction(FormControlRenderInterface $control, array $calback, $caption = null): DataTableEngine{
-        $this->rowActions[]= (new ActionTable($control,$calback))->setCaption($caption);
+    public function addRowAction(FormControlRenderInterface $control, array $calback, $caption = null): DataTableEngine
+    {
+        $this->rowActions[] = (new ActionTable($control, $calback))->setCaption($caption);
         return $this;
     }
 
@@ -406,7 +416,8 @@ class DataTableEngine
      * очистка буфера вывода
      * @return DataTableEngine
      */
-    public function clearContent(): DataTableEngine{
+    public function clearContent(): DataTableEngine
+    {
         $this->getOutput()->clear();
         return $this;
     }
@@ -416,7 +427,8 @@ class DataTableEngine
      * @param $content
      * @return DataTableEngine
      */
-    public function addContent(string $content): DataTableEngine{
+    public function addContent(string $content): DataTableEngine
+    {
         $this->getOutput()->addContent($content);
         return $this;
     }
@@ -426,10 +438,9 @@ class DataTableEngine
      * @param array $calback
      * @return DataTableEngine
      */
-    public function addRowActionHandler(string $actionName,array $calback):DataTableEngine  {
-        $this->rowActions[]= (new ActionTable(
-            new Submit($actionName, $actionName)
-            ,$calback));
+    public function addRowActionTable(ActionTable $actionTable): DataTableEngine
+    {
+        $this->rowActions[] = $actionTable;
         return $this;
     }
 
