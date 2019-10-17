@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./bootstrap.php"  convertErrorsToExceptions="false"
+		 convertNoticesToExceptions="false"
+		 convertWarningsToExceptions="false"
+		 stopOnFailure="true">
+
+	<testsuites>
+		<testsuite name="база">
+			<directory>./</directory>
+		</testsuite>
+	</testsuites>
+
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./../src</directory>
+		</whitelist>
+	</filter>
+</phpunit>

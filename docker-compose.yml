@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+
+  codetools:
+    image: dr.tradesoft.ru/docker/images/codetools:7.2.10-xdebug
+    volumes:
+      - "~/.ssh/id_rsa:/root/.win_ssh/id_rsa:rw"
+      - "./:/home/www/war-staging:rw"
