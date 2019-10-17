@@ -13,6 +13,15 @@ use ActiveTable\DataTableEngine;
 interface CommandFactoryInterface
 {
 
+    /**
+     * @param DataTableEngine $output
+     * @return CommandInterface
+     */
     public function build(DataTableEngine $output): CommandInterface;
+
+    /**
+     * @return string
+     */
+    public function getEventName(): string;
 
 }

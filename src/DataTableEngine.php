@@ -12,6 +12,7 @@ use ActiveTable\EmptyControls\TableControl;
 use ActiveTable\EmptyControls\TableFilter;
 use ActiveTable\EmptyControls\TableRowAction;
 use ActiveTable\EmptyControls\TableTopControl;
+use AutoresourceTable\CommandFactory;
 use Infrastructure\ActiveTable\Submit;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -69,7 +70,22 @@ class DataTableEngine
      */
     protected $rowActions = [];
 
+    /**
+     * table class
+     * @var string
+     */
     protected $class;
+
+    /**
+     * form class
+     * @var string
+     */
+    protected $formClass;
+
+    /**
+     * @var
+     */
+    protected $fieldsWidth;
 
     /**
      * @var Content
@@ -84,11 +100,21 @@ class DataTableEngine
      */
     protected $controlAccess = [];
 
+    const CONTROL_ACCESS_EDIT = "edit";
+    const CONTROL_ACCESS_DELETE= "delete";
+    const CONTROL_ACCESS_ADD= "add";
+
     /**
      * критерия выборки из репо нужна для навигации фильтрации и тд. по сути с ним только работает репозиторий
      * @var PaginationInterface
      */
     protected $criteria;
+
+    /**
+     * Кол-во колонок для авторазбивки фильтров
+     * @var int|null
+     */
+    protected $filterColumns;
 
     function __construct(CrudRepositoryInterface $repo, string $name, CommandFactoryInterface $commandFactory,
                          ServerRequestInterface $request, PaginationInterface $criteria)
@@ -102,13 +128,44 @@ class DataTableEngine
     }
 
     /**
+     * @return CommandFactory
+     */
+    public function getCommandFactory(): CommandFactory{
+        return $this->commandFactory;
+    }
+
+    /**
+     * @param int|null $filterColumns
+     * @return DataTableEngine
+     */
+    public function setFilterColumns(?int $filterColumns): DataTableEngine
+    {
+        $this->filterColumns = $filterColumns;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getFilterColumns(): ?int
+    {
+        return $this->filterColumns;
+    }
+
+    /**
+     * формирование комманды
+     */
+    private function prepareCommand(): void {
+        $this->commandFactory->build($this)->process();
+    }
+
+    /**
      * @return string
      */
     public function render(): string
     {
 
-        $this->commandFactory->build($this)->process();
-
+        $this->prepareCommand();
         return $this->output->getContent();
     }
 
@@ -373,6 +430,42 @@ class DataTableEngine
         $this->rowActions[]= (new ActionTable(
             new Submit($actionName, $actionName)
             ,$calback));
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormClass(): string
+    {
+        return $this->formClass;
+    }
+
+    /**
+     * @param string $formClass
+     * @return DataTableEngine
+     */
+    public function setFormClass(string $formClass): DataTableEngine
+    {
+        $this->formClass = $formClass;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFieldsWidth()
+    {
+        return $this->fieldsWidth;
+    }
+
+    /**
+     * @param mixed $fieldsWidth
+     * @return DataTableEngine
+     */
+    public function setFieldsWidth($fieldsWidth): DataTableEngine
+    {
+        $this->fieldsWidth = $fieldsWidth;
         return $this;
     }
 
