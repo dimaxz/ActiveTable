@@ -116,6 +116,9 @@ class DataTableEngine
      */
     protected $filterColumns;
 
+    protected $topControls = true;
+    protected $bottomControls = true;
+
     function __construct(CrudRepositoryInterface $repo, string $name, CommandFactoryInterface $commandFactory,
                          ServerRequestInterface $request, PaginationInterface $criteria)
     {
@@ -126,6 +129,43 @@ class DataTableEngine
         $this->request = $request;
         $this->criteria = $criteria;
     }
+
+    /**
+     * @param bool $topControls
+     * @return DataTableEngine
+     */
+    public function setTopControls(bool $topControls): DataTableEngine
+    {
+        $this->topControls = $topControls;
+        return $this;
+    }
+
+    /**
+     * @param bool $bottomControls
+     * @return DataTableEngine
+     */
+    public function setBottomControls(bool $bottomControls): DataTableEngine
+    {
+        $this->bottomControls = $bottomControls;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTopControls(): bool
+    {
+        return $this->topControls;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBottomControls(): bool
+    {
+        return $this->bottomControls;
+    }
+
 
     /**
      * @return CommandFactory
