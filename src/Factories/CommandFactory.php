@@ -1,20 +1,14 @@
 <?php
-
-
 namespace ActiveTable\Factories;
 
-//use ActiveTable\Commands\FormSubmit;
 use ActiveTable\Commands\FormView;
 use ActiveTable\Commands\TableView;
 use ActiveTable\Contracts\CommandFactoryInterface;
 use ActiveTable\Contracts\CommandInterface;
 use ActiveTable\Contracts\OutputInterface;
 use ActiveTable\EmptyControls\Form;
-//use ActiveTable\EmptyControls\TableAction;
 use ActiveTable\EmptyControls\TableBottomControl;
 use ActiveTable\EmptyControls\TableControl;
-//use ActiveTable\EmptyControls\TableFilter;
-//use ActiveTable\EmptyControls\TableRowAction;
 use ActiveTable\EmptyControls\TableTopControl;
 use ActiveTable\Exceptions\ActiveTableException;
 use ActiveTable\Commands\TableAction;
@@ -26,10 +20,13 @@ use ActiveTable\Commands\TableAction;
  */
 class CommandFactory implements CommandFactoryInterface
 {
+    /**
+     * @var array
+     */
     protected $events = [
-        "TABLE_VIEW",
-        "FORM_VIEW",
-        "TABLE_ACTION"
+        'TABLE_VIEW',
+        'FORM_VIEW',
+        'TABLE_ACTION'
     ];
 
     /**
@@ -42,10 +39,10 @@ class CommandFactory implements CommandFactoryInterface
      * @param $event
      * @throws ActiveTableException
      */
-    public function __construct(string $event = "TABLE_VIEW")
+    public function __construct(string $event = 'TABLE_VIEW')
     {
-        if(!in_array($event,$this->events)){
-            throw new ActiveTableException("event not found");
+        if(!in_array($event,$this->events,true)){
+            throw new ActiveTableException('event not found');
         }
         $this->event = $event;
     }
@@ -58,41 +55,36 @@ class CommandFactory implements CommandFactoryInterface
     public function build(OutputInterface $output): CommandInterface
     {
         switch ($this->event){
-            case "TABLE_VIEW";
-
-                //стандартное отображение таблицы
-                return new TableView(
-                    $output,
-                    //new TableFilter(),
-                    //new TableAction(),
-                    //new TableRowAction(),
-                    new TableTopControl(),
-                    new TableControl(),
-                    new TableBottomControl()
-                );
-
-            break;
-
-            case "FORM_VIEW";
-
+            case 'FORM_VIEW';
                 //стандартное отображение таблицы
                 return new FormView(
                     $output,
                     new Form()
                 );
-
                 break;
-
-            case "TABLE_ACTION";
-
+            case 'TABLE_ACTION';
                 //стандартное отображение таблицы
                 return new TableAction(
                     $output,
                     new TableControl()
                 );
-
                 break;
         }
+
+        //стандартное отображение таблицы
+        return new TableView(
+            $output,
+            new TableTopControl(),
+            new TableControl(),
+            new TableBottomControl()
+        );
     }
 
+    /**
+     * @return string
+     */
+    public function getEventName(): string
+    {
+        return $this->event;
+    }
 }

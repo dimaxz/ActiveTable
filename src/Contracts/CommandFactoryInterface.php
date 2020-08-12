@@ -1,6 +1,5 @@
 <?php
 
-
 namespace ActiveTable\Contracts;
 
 use ActiveTable\DataTableEngine;
@@ -14,10 +13,10 @@ interface CommandFactoryInterface
 {
 
     /**
-     * @param DataTableEngine $output
+     * @param OutputInterface $output
      * @return CommandInterface
      */
-    public function build(DataTableEngine $output): CommandInterface;
+    public function build(OutputInterface $output): CommandInterface;
 
     /**
      * @return string

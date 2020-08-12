@@ -168,9 +168,9 @@ class DataTableEngine
 
 
     /**
-     * @return CommandFactory
+     * @return CommandFactoryInterface
      */
-    public function getCommandFactory(): CommandFactory
+    public function getCommandFactory(): CommandFactoryInterface
     {
         return $this->commandFactory;
     }
@@ -198,7 +198,7 @@ class DataTableEngine
      */
     private function prepareCommand(): void
     {
-        $this->commandFactory->build($this)->process();
+        $this->commandFactory->build($this->output)->process();
     }
 
     /**
