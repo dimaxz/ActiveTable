@@ -14,11 +14,47 @@ class ColumnTable {
 	protected $name;
 	protected $caption;
 	protected $exported = true;
+    /**
+     * @var int|null
+     */
+	protected $width;
+    /**
+     * @var int|null
+     */
+	protected $widthPercent;
 
-	function __construct($name, $caption) {
+	public function __construct($name, $caption) {
 		$this->name = $name;
 		$this->caption = $caption;
 	}
+
+    /**
+     * @return int|null
+     */
+    public function getWidth(): ?string
+    {
+        return $this->width > 0 || $this->widthPercent > 0 ?
+            ($this->width > 0 ? $this->width.'px': $this->widthPercent .'%'):
+            null;
+    }
+
+    /**
+     * @param int|null $width
+     * @return ColumnTable
+     */
+    public function setWidth(?int $width, bool  $percent = false): ColumnTable
+    {
+        if($percent===false) {
+            $this->width = $width;
+        }
+        else{
+            $this->widthPercent = $width;
+        }
+
+        return $this;
+    }
+
+
 
 	public function setName(string $name) {
 

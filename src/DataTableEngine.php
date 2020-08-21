@@ -17,6 +17,7 @@ use Infrastructure\ActiveTable\Submit;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Repo\CrudRepositoryBuilderInterface;
 use Repo\CrudRepositoryInterface;
 use Repo\PaginationInterface;
 use Repo\RepositoryCriteriaInterface;
@@ -65,6 +66,12 @@ class DataTableEngine
     protected $actions = [];
 
     /**
+     * Кнопки в правой части таблицы
+     * @var array
+     */
+    protected $buttons = [];
+
+    /**
      * контролы для выборочных записей таблицы, активирют чекбоксы
      * @var array
      */
@@ -103,6 +110,10 @@ class DataTableEngine
     const CONTROL_ACCESS_EDIT = "edit";
     const CONTROL_ACCESS_DELETE = "delete";
     const CONTROL_ACCESS_ADD = "add";
+    const CONTROL_PAGINATION = "pagination_view";
+    const CONTROL_ROWS_ACTION = "select_rows_action";
+    const CONTROL_ROWS_SELECT = "select_rows";
+    const CONTROL_FILTER_BUTTON = 'filter_button';
 
     /**
      * критерия выборки из репо нужна для навигации фильтрации и тд. по сути с ним только работает репозиторий
@@ -128,6 +139,24 @@ class DataTableEngine
         $this->output = new Content();
         $this->request = $request;
         $this->criteria = $criteria;
+    }
+
+    /**
+     * @param FormControlRenderInterface $field
+     * @return $this
+     */
+    public function addButton(FormControlRenderInterface $field)
+    {
+        $this->buttons [] = $field;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getButtons(): array
+    {
+        return $this->buttons;
     }
 
     /**
@@ -198,7 +227,7 @@ class DataTableEngine
      */
     private function prepareCommand(): void
     {
-        $this->commandFactory->build($this->output)->process();
+        $this->commandFactory->build($this)->process();
     }
 
     /**
@@ -275,9 +304,9 @@ class DataTableEngine
     }
 
     /**
-     * @return CrudRepositoryInterface
+     * @return CrudRepositoryBuilderInterface
      */
-    public function getRepo(): CrudRepositoryInterface
+    public function getRepo(): CrudRepositoryBuilderInterface
     {
         return $this->repo;
     }

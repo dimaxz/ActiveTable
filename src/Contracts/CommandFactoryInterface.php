@@ -16,7 +16,7 @@ interface CommandFactoryInterface
      * @param OutputInterface $output
      * @return CommandInterface
      */
-    public function build(OutputInterface $output): CommandInterface;
+    public function build(DataTableEngine $tableEngine): CommandInterface;
 
     /**
      * @return string
