@@ -269,7 +269,9 @@ class DataTableEngine
      */
     public function removeControlAccess(string $name): DataTableEngine
     {
-        if ($key = array_search($this->controlAccess)) {
+        $key = array_search($name , $this->controlAccess);
+
+        if ($key !== false) {
             unset($this->controlAccess[$key]);
         }
 

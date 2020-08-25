@@ -10,10 +10,10 @@ namespace ActiveTable;
 class ColumnTable {
 
 	protected $format = [];
-	protected $sorted = true;
+	protected $sorted = false;
 	protected $name;
 	protected $caption;
-	protected $exported = true;
+	protected $exported = false;
     /**
      * @var int|null
      */
