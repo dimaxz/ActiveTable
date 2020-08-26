@@ -15,11 +15,37 @@ class FormField
 
     protected $require = false;
 
+    /**
+     * @var string|null
+     */
     protected $caption;
 
-    function __construct(ControlRenderInterface $control)
+    /**
+     * @var string|null
+     */
+    protected $helpCaption;
+
+    public function __construct(ControlRenderInterface $control)
     {
         $this->control = $control;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getHelpCaption(): ?string
+    {
+        return $this->helpCaption;
+    }
+
+    /**
+     * @param string|null $helpCaption
+     * @return FormField
+     */
+    public function setHelpCaption(?string $helpCaption): FormField
+    {
+        $this->helpCaption = $helpCaption;
+        return $this;
     }
 
     /**

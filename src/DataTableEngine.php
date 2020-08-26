@@ -26,6 +26,11 @@ class DataTableEngine
 {
 
     /**
+     * @var array
+     */
+    protected $defaultSortColumn = [];
+
+    /**
      * @var CrudRepositoryInterface
      */
     protected $repo;
@@ -114,6 +119,8 @@ class DataTableEngine
     const CONTROL_ROWS_ACTION = "select_rows_action";
     const CONTROL_ROWS_SELECT = "select_rows";
     const CONTROL_FILTER_BUTTON = 'filter_button';
+    const CONTROL_FORM_SAVE_BUTTON = 'form_save_button';
+    const CONTROL_FORM_CANCEL_BUTTON = 'form_cancel_button';
 
     /**
      * критерия выборки из репо нужна для навигации фильтрации и тд. по сути с ним только работает репозиторий
@@ -139,6 +146,24 @@ class DataTableEngine
         $this->output = new Content();
         $this->request = $request;
         $this->criteria = $criteria;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultSortColumn(): array
+    {
+        return $this->defaultSortColumn;
+    }
+
+    /**
+     * @param mixed $defaultSortColumn
+     * @return DataTableEngine
+     */
+    public function setDefaultSortColumn(string $defaultSortColumn, string $order)
+    {
+        $this->defaultSortColumn[$defaultSortColumn] = $order;
+        return $this;
     }
 
     /**
@@ -269,7 +294,7 @@ class DataTableEngine
      */
     public function removeControlAccess(string $name): DataTableEngine
     {
-        $key = array_search($name , $this->controlAccess);
+        $key = array_search($name, $this->controlAccess);
 
         if ($key !== false) {
             unset($this->controlAccess[$key]);
@@ -389,9 +414,11 @@ class DataTableEngine
     /**
      * @param FormControlRenderInterface $field
      */
-    public function addField(FormControlRenderInterface $field, $require = false, $caption = null): DataTableEngine
+    public function addField(
+        FormControlRenderInterface $field, bool $require = false,
+        string $caption = null, string $help = null): DataTableEngine
     {
-        $this->fields[] = (new FormField($field))->setRequire($require)->setCaption($caption);
+        $this->fields[] = (new FormField($field))->setRequire($require)->setCaption($caption)->setHelpCaption($help);
         return $this;
     }
 
