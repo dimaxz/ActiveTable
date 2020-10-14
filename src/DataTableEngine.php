@@ -3,6 +3,7 @@
 namespace ActiveTable;
 
 use ActiveTable\Contracts\CommandFactoryInterface;
+use ActiveTable\Contracts\CommandInterface;
 use ActiveTable\Contracts\ControlRenderInterface;
 use ActiveTable\Contracts\FormControlRenderInterface;
 use ActiveTable\EmptyControls\Content;
@@ -13,7 +14,9 @@ use ActiveTable\EmptyControls\TableFilter;
 use ActiveTable\EmptyControls\TableRowAction;
 use ActiveTable\EmptyControls\TableTopControl;
 use AutoresourceTable\CommandFactory;
+use Core\Form\Control\FormControl;
 use Infrastructure\ActiveTable\Submit;
+use phpDocumentor\Reflection\Types\This;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -105,6 +108,11 @@ class DataTableEngine
     protected $output;
 
     protected $request;
+
+    /**
+     * @var array
+     */
+    protected $captions = [];
 
     /**
      * касмтомный перечень контролов по умолчанию
@@ -321,6 +329,7 @@ class DataTableEngine
     public function addColumn(ColumnTable $column): self
     {
         $this->columns [] = $column;
+        $this->captions[$column->getName()] = $column->getCaption();
         return $this;
     }
 
@@ -416,10 +425,55 @@ class DataTableEngine
      */
     public function addField(
         FormControlRenderInterface $field, bool $require = false,
-        string $caption = null, string $help = null): DataTableEngine
+        string $caption = null, string $help = null, array $validations = []): DataTableEngine
     {
-        $this->fields[] = (new FormField($field))->setRequire($require)->setCaption($caption)->setHelpCaption($help);
+
+        $control = (new FormField($field))
+            ->setRequire($require)
+            ->setCaption($this->makeCaption($field, $caption))
+            ->setHelpCaption($help)
+            ->setCustomValidations($validations);
+
+        $fields = $this->fields;
+
+        //tесли уже есть контрол, переопределим его
+        foreach ($fields as $k => $fieldExist) {
+            if ($field->getName() === $fieldExist->getControl()->getName()) {
+                $this->fields[$k] = $control;
+                return $this;
+            }
+        }
+
+        $this->fields[] = $control;
+
         return $this;
+    }
+
+    /**
+     * @param string $nameControl
+     * @return DataTableEngine
+     */
+    public function removeFieldByName(string $nameControl): self
+    {
+        $fields = $this->fields;
+        foreach ($fields as $k => $field) {
+            if ($nameControl === $field->getControl()->getName()) {
+                unset($this->fields[$k]);
+                break;
+            }
+        }
+        return $this;
+    }
+
+    private function makeCaption(?FormControl $formControl, ?string $caption): ?string
+    {
+        if ($caption) {
+            return $caption;
+        }
+
+        $name = $formControl->getName();
+
+        return $this->captions[$name] ?? null;
     }
 
     /**
@@ -462,6 +516,20 @@ class DataTableEngine
     }
 
     /**
+     * @param FormControlRenderInterface $control
+     * @deprecated
+     * @see DataTableEngine::addAction()
+     * @param array $calback
+     * @param null $caption
+     * @return DataTableEngine
+     */
+    public function addRowAction(FormControlRenderInterface $control, array $calback, $caption = null): DataTableEngine
+    {
+        $this->rowActions[] = (new ActionTable($control, $calback))->setCaption($caption);
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getActions(): array
@@ -481,23 +549,11 @@ class DataTableEngine
 
 
     /**
-     * @param FormControlRenderInterface $control
-     * @param array $calback
-     * @param null $caption
-     * @return DataTableEngine
-     */
-    public function addRowAction(FormControlRenderInterface $control, array $calback, $caption = null): DataTableEngine
-    {
-        $this->rowActions[] = (new ActionTable($control, $calback))->setCaption($caption);
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getRowActions(): array
     {
-        return $this->rowActions;
+        return array_reverse($this->rowActions);
     }
 
     /**
@@ -539,6 +595,38 @@ class DataTableEngine
     public function addRowActionTable(ActionTable $actionTable): DataTableEngine
     {
         $this->rowActions[] = $actionTable;
+        return $this;
+    }
+
+    /**
+     * @param string $triggerName
+     * @param CommandInterface $command
+     * @param string $caption
+     */
+    final public function addRowActionCommand(string $triggerName, CommandInterface $command, string $caption): self
+    {
+
+        $this
+            ->setCommand($triggerName, $command)
+            ->addRowActionTable(
+                (new ActionTable(
+                    new \Core\Form\Control\Submit($triggerName, $triggerName), []
+                ))->setCaption($caption)
+            );
+
+        return $this;
+    }
+
+    /**
+     * @param string $triggerName
+     * @param CommandInterface $command
+     * @return DataTableEngine
+     */
+    public function setCommand(string $triggerName, CommandInterface $command): self
+    {
+        $this
+            ->getCommandFactory()
+            ->addCommand($triggerName, $command);
         return $this;
     }
 

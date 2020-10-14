@@ -23,4 +23,11 @@ interface CommandFactoryInterface
      */
     public function getEventName(): string;
 
+    /**
+     * @param string $trigger
+     * @param CommandInterface $command
+     * @return CommandFactoryInterface
+     */
+    public function addCommand(string $trigger, CommandInterface $command);
+
 }

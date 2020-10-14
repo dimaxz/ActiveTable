@@ -25,10 +25,32 @@ class FormField
      */
     protected $helpCaption;
 
+    protected $customValidations = [];
+
     public function __construct(ControlRenderInterface $control)
     {
         $this->control = $control;
     }
+
+    /**
+     * @return array
+     */
+    public function getCustomValidations(): array
+    {
+        return $this->customValidations;
+    }
+
+    /**
+     * @param array $customValidations
+     * @return FormField
+     */
+    public function setCustomValidations(array $customValidations): FormField
+    {
+        $this->customValidations = $customValidations;
+        return $this;
+    }
+
+
 
     /**
      * @return string|null
