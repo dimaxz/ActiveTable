@@ -17,6 +17,7 @@ use AutoresourceTable\CommandFactory;
 use Core\Form\Control\FormControl;
 use Infrastructure\ActiveTable\Submit;
 use phpDocumentor\Reflection\Types\This;
+use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -24,9 +25,14 @@ use Repo\CrudRepositoryBuilderInterface;
 use Repo\CrudRepositoryInterface;
 use Repo\PaginationInterface;
 use Repo\RepositoryCriteriaInterface;
+use Shop\Models\Product\Product;
 
 class DataTableEngine
 {
+    /**
+     * @var ActiveRecordInterface
+     */
+    protected $tableRowEntity;
 
     /**
      * @var array
@@ -155,6 +161,26 @@ class DataTableEngine
         $this->request = $request;
         $this->criteria = $criteria;
     }
+
+    /**
+     * @param ActiveRecordInterface $tableRowEntity
+     * @return DataTableEngine
+     */
+    public function setTableRowEntity(ActiveRecordInterface $tableRowEntity): DataTableEngine
+    {
+        $this->tableRowEntity = $tableRowEntity;
+        return $this;
+    }
+
+    /**
+     * @return ActiveRecordInterface
+     */
+    public function getTableRowEntity(): ActiveRecordInterface
+    {
+        return $this->tableRowEntity;
+    }
+
+
 
     /**
      * @return mixed
