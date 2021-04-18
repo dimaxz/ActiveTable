@@ -13,6 +13,7 @@ use ActiveTable\EmptyControls\TableControl;
 use ActiveTable\EmptyControls\TableFilter;
 use ActiveTable\EmptyControls\TableRowAction;
 use ActiveTable\EmptyControls\TableTopControl;
+use ActiveTable\Exceptions\TableActionException;
 use AutoresourceTable\CommandFactory;
 use Core\Form\Control\FormControl;
 use Infrastructure\ActiveTable\Submit;
