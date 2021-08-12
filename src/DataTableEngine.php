@@ -22,11 +22,11 @@ use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Repo\Concrete\AbstractEntity;
 use Repo\CrudRepositoryBuilderInterface;
 use Repo\CrudRepositoryInterface;
 use Repo\PaginationInterface;
 use Repo\RepositoryCriteriaInterface;
-use Shop\Models\Product\Product;
 
 class DataTableEngine
 {
@@ -174,9 +174,9 @@ class DataTableEngine
     }
 
     /**
-     * @return ActiveRecordInterface
+     * @return AbstractEntity
      */
-    public function getTableRowEntity(): ActiveRecordInterface
+    public function getTableRowEntity(): AbstractEntity
     {
         return $this->tableRowEntity;
     }
