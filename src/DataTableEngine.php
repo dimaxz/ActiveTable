@@ -18,7 +18,6 @@ use AutoresourceTable\CommandFactory;
 use Core\Form\Control\FormControl;
 use Infrastructure\ActiveTable\Submit;
 use phpDocumentor\Reflection\Types\This;
-use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -31,7 +30,7 @@ use Repo\RepositoryCriteriaInterface;
 class DataTableEngine
 {
     /**
-     * @var ActiveRecordInterface
+     * @var AbstractEntity
      */
     protected $tableRowEntity;
 
@@ -164,10 +163,10 @@ class DataTableEngine
     }
 
     /**
-     * @param ActiveRecordInterface $tableRowEntity
-     * @return DataTableEngine
+     * @param AbstractEntity $tableRowEntity
+     * @return $this
      */
-    public function setTableRowEntity(ActiveRecordInterface $tableRowEntity): DataTableEngine
+    public function setTableRowEntity(AbstractEntity $tableRowEntity): DataTableEngine
     {
         $this->tableRowEntity = $tableRowEntity;
         return $this;
