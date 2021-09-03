@@ -21,16 +21,16 @@ use phpDocumentor\Reflection\Types\This;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Repo\Concrete\AbstractEntity;
 use Repo\CrudRepositoryBuilderInterface;
 use Repo\CrudRepositoryInterface;
+use Repo\EntityInterface;
 use Repo\PaginationInterface;
 use Repo\RepositoryCriteriaInterface;
 
 class DataTableEngine
 {
     /**
-     * @var AbstractEntity
+     * @var EntityInterface
      */
     protected $tableRowEntity;
 
@@ -84,6 +84,12 @@ class DataTableEngine
      * @var array
      */
     protected $buttons = [];
+
+    /**
+     * Кнопки в левой части таблицы
+     * @var array
+     */
+    protected $actionButtons = [];
 
     /**
      * контролы для выборочных записей таблицы, активирют чекбоксы
@@ -166,7 +172,7 @@ class DataTableEngine
      * @param AbstractEntity $tableRowEntity
      * @return $this
      */
-    public function setTableRowEntity(AbstractEntity $tableRowEntity): DataTableEngine
+    public function setTableRowEntity(EntityInterface $tableRowEntity): DataTableEngine
     {
         $this->tableRowEntity = $tableRowEntity;
         return $this;
@@ -175,7 +181,7 @@ class DataTableEngine
     /**
      * @return AbstractEntity
      */
-    public function getTableRowEntity(): AbstractEntity
+    public function getTableRowEntity(): EntityInterface
     {
         return $this->tableRowEntity;
     }
@@ -211,11 +217,29 @@ class DataTableEngine
     }
 
     /**
+     * @param FormControlRenderInterface $field
+     * @return $this
+     */
+    public function addActionButton(FormControlRenderInterface $field)
+    {
+        $this->actionButtons [] = $field;
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getButtons(): array
     {
         return $this->buttons;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActionButtons(): array
+    {
+        return $this->actionButtons;
     }
 
     /**
