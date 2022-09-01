@@ -383,6 +383,18 @@ class DataTableEngine
         return $this;
     }
 
+    /**
+     * Добавление колонки
+     *
+     * @param ColumnTable $column
+     * @return $this
+     */
+    public function addFirstColumn(ColumnTable $column): self
+    {
+        $this->columns = array_merge([$column],$this->columns);
+        return $this;
+    }
+
     public function setClass(string $class): self
     {
         $this->class = $class;
