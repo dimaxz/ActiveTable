@@ -135,12 +135,14 @@ class DataTableEngine
     const CONTROL_ACCESS_EDIT = "edit";
     const CONTROL_ACCESS_DELETE = "delete";
     const CONTROL_ACCESS_ADD = "add";
+    const CONTROL_ACCESS_EXPORT = 'export';
     const CONTROL_PAGINATION = "pagination_view";
     const CONTROL_ROWS_ACTION = "select_rows_action";
     const CONTROL_ROWS_SELECT = "select_rows";
     const CONTROL_FILTER_BUTTON = 'filter_button';
     const CONTROL_FORM_SAVE_BUTTON = 'form_save_button';
     const CONTROL_FORM_CANCEL_BUTTON = 'form_cancel_button';
+
 
     /**
      * критерия выборки из репо нужна для навигации фильтрации и тд. по сути с ним только работает репозиторий
