@@ -1,10 +1,10 @@
 {
-	"name": "diamond/activetable",
+	"name": "dimaxz/activetable",
 	"description": "ActiveTable Engine, grid+form",
 	"minimum-stability": "dev",
 	"require": {
         "php": "^8.0",
-		"diamond/repository": "dev-reliase-2.0"
+		"dimaxz/repository": "dev-reliase-2.0"
     },
 	"require-dev": {
 		"phpunit/phpunit"	: "9.5.*",
