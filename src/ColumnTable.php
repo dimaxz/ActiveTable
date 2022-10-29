@@ -14,10 +14,22 @@ class ColumnTable {
 	protected $name;
 	protected $caption;
 	protected $exported = false;
+
+    /**
+     * @var array|null
+     */
+    protected $headAttributes;
+
+    /**
+     * @var string|null
+     */
+    protected $class;
+
     /**
      * @var int|null
      */
 	protected $width;
+
     /**
      * @var int|null
      */
@@ -27,6 +39,43 @@ class ColumnTable {
 		$this->name = $name;
 		$this->caption = $caption;
 	}
+
+    /**
+     * @return array|null
+     */
+    public function getHeadAttributes(): ?array
+    {
+        return $this->headAttributes;
+    }
+
+    /**
+     * @param array|null $headAttributes
+     */
+    public function setHeadAttributes(?array $headAttributes): ColumnTable
+    {
+        $this->headAttributes = $headAttributes;
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getClass(): ?string
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param string|null $class
+     * @return void
+     */
+    public function setClass(?string $class): ColumnTable
+    {
+        $this->class = $class;
+        return $this;
+    }
+
 
     /**
      * @return int|null

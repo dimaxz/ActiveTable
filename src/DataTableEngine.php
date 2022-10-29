@@ -104,6 +104,11 @@ class DataTableEngine
     protected $class;
 
     /**
+     * @var string|null
+     */
+    protected $id;
+
+    /**
      * form class
      * @var string
      */
@@ -158,6 +163,12 @@ class DataTableEngine
 
     protected $topControls = true;
     protected $bottomControls = true;
+    protected string|null $addButtonTitle = null;
+
+    protected array $tabs = [];
+    protected array $fieldGroups = [];
+    protected string|null $makeTab = null;
+    protected string|null $makeFieldGroup = null;
 
     function __construct(CrudRepositoryInterface $repo, string $name, CommandFactoryInterface $commandFactory,
                          ServerRequestInterface $request, PaginationInterface $criteria)
@@ -171,24 +182,92 @@ class DataTableEngine
     }
 
     /**
-     * @param AbstractEntity $tableRowEntity
-     * @return $this
+     * @return array
      */
+    public function getFieldGroups(): array
+    {
+        return $this->fieldGroups;
+    }
+
+
+    public function startFieldGroup(string $group): self
+    {
+        $this->makeFieldGroup = $group;
+        return $this;
+    }
+
+    public function endFieldGroup(): self
+    {
+        $this->makeFieldGroup = null;
+        return $this;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getTabs(): array
+    {
+        return $this->tabs;
+    }
+
+
+    public function startTab(string $tab): self
+    {
+        $this->makeTab = $tab;
+        return $this;
+    }
+
+    public function endTab(): self
+    {
+        $this->makeTab = null;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddButtonTitle()
+    {
+        return $this->addButtonTitle;
+    }
+
+    /**
+     * @param mixed $addButtonTitle
+     * @return DataTableEngine
+     */
+    public function setAddButtonTitle(string $addButtonTitle)
+    {
+        $this->addButtonTitle = $addButtonTitle;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string|null $id
+     */
+    public function setId(?string $id): void
+    {
+        $this->id = $id;
+    }
+
     public function setTableRowEntity(EntityInterface $tableRowEntity): DataTableEngine
     {
         $this->tableRowEntity = $tableRowEntity;
         return $this;
     }
 
-    /**
-     * @return AbstractEntity
-     */
     public function getTableRowEntity(): EntityInterface
     {
         return $this->tableRowEntity;
     }
-
-
 
     /**
      * @return mixed
@@ -492,6 +571,14 @@ class DataTableEngine
         string $caption = null, string $help = null, array $validations = []): DataTableEngine
     {
 
+        if($this->makeTab !== null){
+            $this->tabs[$this->makeTab][]=$field->getName();
+        }
+
+        if($this->makeFieldGroup !== null){
+            $this->fieldGroups[$this->makeFieldGroup][]=$field->getName();
+        }
+
         $control = (new FormField($field))
             ->setRequire($require)
             ->setCaption($this->makeCaption($field, $caption))
@@ -500,7 +587,7 @@ class DataTableEngine
 
         $fields = $this->fields;
 
-        //tесли уже есть контрол, переопределим его
+        //если уже есть контрол, переопределим его
         foreach ($fields as $k => $fieldExist) {
             if ($field->getName() === $fieldExist->getControl()->getName()) {
                 $this->fields[$k] = $control;
