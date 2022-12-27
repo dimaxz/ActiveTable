@@ -266,7 +266,25 @@ class DataTableEngine
 
     public function getTableRowEntity(): EntityInterface
     {
+
         return $this->tableRowEntity;
+    }
+
+    public function loadFormEntity(int $id = null): ?EntityInterface
+    {
+        if(!$id){
+            if(!$id = $this->getCriteria()->getFilterById()){
+                return null;
+            }
+        }
+
+        if(!$result = $this->getRepo()->findByCriteria(
+            $this->getCriteria()->setFilterById($id)->setPage(0)
+        )->current()){
+            return null;
+        }
+
+        return $result;
     }
 
     /**
