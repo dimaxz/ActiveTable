@@ -170,6 +170,9 @@ class DataTableEngine
     protected string|null $makeTab = null;
     protected string|null $makeFieldGroup = null;
 
+    protected string $formEditText = 'Редактирование записи №';
+    protected string $formAddText = 'Новая запись';
+
     function __construct(CrudRepositoryInterface $repo, string $name, CommandFactoryInterface $commandFactory,
                          ServerRequestInterface $request, PaginationInterface $criteria)
     {
@@ -179,6 +182,42 @@ class DataTableEngine
         $this->output = new Content();
         $this->request = $request;
         $this->criteria = $criteria;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormEditText(): string
+    {
+        return $this->formEditText;
+    }
+
+    /**
+     * @param string $formEditText
+     * @return DataTableEngine
+     */
+    public function setFormEditText(string $formEditText): DataTableEngine
+    {
+        $this->formEditText = $formEditText;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormAddText(): string
+    {
+        return $this->formAddText;
+    }
+
+    /**
+     * @param string $formAddText
+     * @return DataTableEngine
+     */
+    public function setFormAddText(string $formAddText): DataTableEngine
+    {
+        $this->formAddText = $formAddText;
+        return $this;
     }
 
     /**
