@@ -4,31 +4,20 @@ namespace ActiveTable;
 
 use ActiveTable\Contracts\CommandFactoryInterface;
 use ActiveTable\Contracts\CommandInterface;
-use ActiveTable\Contracts\ControlRenderInterface;
 use ActiveTable\Contracts\FormControlRenderInterface;
 use ActiveTable\EmptyControls\Content;
-use ActiveTable\EmptyControls\TableAction;
-use ActiveTable\EmptyControls\TableBottomControl;
-use ActiveTable\EmptyControls\TableControl;
-use ActiveTable\EmptyControls\TableFilter;
-use ActiveTable\EmptyControls\TableRowAction;
-use ActiveTable\EmptyControls\TableTopControl;
-use ActiveTable\Exceptions\TableActionException;
-use AutoresourceTable\CommandFactory;
 use Core\Form\Control\FormControl;
-use Infrastructure\ActiveTable\Submit;
-use phpDocumentor\Reflection\Types\This;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Repo\CrudRepositoryBuilderInterface;
 use Repo\CrudRepositoryInterface;
 use Repo\EntityInterface;
 use Repo\PaginationInterface;
-use Repo\RepositoryCriteriaInterface;
 
 class DataTableEngine
 {
+
+    private string|null $formTemplate = null;
+
     /**
      * @var EntityInterface
      */
@@ -620,6 +609,12 @@ class DataTableEngine
         return $this;
     }
 
+    public function setFormTemplate(string $template): DataTableEngine
+    {
+        $this->formTemplate = $template;
+        return $this;
+    }
+
     /**
      * @param FormControlRenderInterface $field
      */
@@ -872,6 +867,14 @@ class DataTableEngine
     {
         $this->fieldsWidth = $fieldsWidth;
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFormTemplate(): ?string
+    {
+        return $this->formTemplate;
     }
 
 }
