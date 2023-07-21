@@ -4,31 +4,20 @@ namespace ActiveTable;
 
 use ActiveTable\Contracts\CommandFactoryInterface;
 use ActiveTable\Contracts\CommandInterface;
-use ActiveTable\Contracts\ControlRenderInterface;
 use ActiveTable\Contracts\FormControlRenderInterface;
 use ActiveTable\EmptyControls\Content;
-use ActiveTable\EmptyControls\TableAction;
-use ActiveTable\EmptyControls\TableBottomControl;
-use ActiveTable\EmptyControls\TableControl;
-use ActiveTable\EmptyControls\TableFilter;
-use ActiveTable\EmptyControls\TableRowAction;
-use ActiveTable\EmptyControls\TableTopControl;
-use ActiveTable\Exceptions\TableActionException;
-use AutoresourceTable\CommandFactory;
 use Core\Form\Control\FormControl;
-use Infrastructure\ActiveTable\Submit;
-use phpDocumentor\Reflection\Types\This;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
 use Repo\CrudRepositoryBuilderInterface;
 use Repo\CrudRepositoryInterface;
 use Repo\EntityInterface;
 use Repo\PaginationInterface;
-use Repo\RepositoryCriteriaInterface;
 
 class DataTableEngine
 {
+
+    private string|null $formTemplate = null;
+
     /**
      * @var EntityInterface
      */
@@ -104,6 +93,11 @@ class DataTableEngine
     protected $class;
 
     /**
+     * @var string|null
+     */
+    protected $id;
+
+    /**
      * form class
      * @var string
      */
@@ -135,12 +129,14 @@ class DataTableEngine
     const CONTROL_ACCESS_EDIT = "edit";
     const CONTROL_ACCESS_DELETE = "delete";
     const CONTROL_ACCESS_ADD = "add";
+    const CONTROL_ACCESS_EXPORT = 'export';
     const CONTROL_PAGINATION = "pagination_view";
     const CONTROL_ROWS_ACTION = "select_rows_action";
     const CONTROL_ROWS_SELECT = "select_rows";
     const CONTROL_FILTER_BUTTON = 'filter_button';
     const CONTROL_FORM_SAVE_BUTTON = 'form_save_button';
     const CONTROL_FORM_CANCEL_BUTTON = 'form_cancel_button';
+
 
     /**
      * критерия выборки из репо нужна для навигации фильтрации и тд. по сути с ним только работает репозиторий
@@ -156,6 +152,15 @@ class DataTableEngine
 
     protected $topControls = true;
     protected $bottomControls = true;
+    protected string|null $addButtonTitle = null;
+
+    protected array $tabs = [];
+    protected array $fieldGroups = [];
+    protected string|null $makeTab = null;
+    protected string|null $makeFieldGroup = null;
+
+    protected string $formEditText = 'Редактирование записи №';
+    protected string $formAddText = 'Новая запись';
 
     function __construct(CrudRepositoryInterface $repo, string $name, CommandFactoryInterface $commandFactory,
                          ServerRequestInterface $request, PaginationInterface $criteria)
@@ -169,24 +174,146 @@ class DataTableEngine
     }
 
     /**
-     * @param AbstractEntity $tableRowEntity
-     * @return $this
+     * @return string
      */
+    public function getFormEditText(): string
+    {
+        return $this->formEditText;
+    }
+
+    /**
+     * @param string $formEditText
+     * @return DataTableEngine
+     */
+    public function setFormEditText(string $formEditText): DataTableEngine
+    {
+        $this->formEditText = $formEditText;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormAddText(): string
+    {
+        return $this->formAddText;
+    }
+
+    /**
+     * @param string $formAddText
+     * @return DataTableEngine
+     */
+    public function setFormAddText(string $formAddText): DataTableEngine
+    {
+        $this->formAddText = $formAddText;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFieldGroups(): array
+    {
+        return $this->fieldGroups;
+    }
+
+
+    public function startFieldGroup(string $group): self
+    {
+        $this->makeFieldGroup = $group;
+        return $this;
+    }
+
+    public function endFieldGroup(): self
+    {
+        $this->makeFieldGroup = null;
+        return $this;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getTabs(): array
+    {
+        return $this->tabs;
+    }
+
+
+    public function startTab(string $tab): self
+    {
+        $this->makeTab = $tab;
+        return $this;
+    }
+
+    public function endTab(): self
+    {
+        $this->makeTab = null;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddButtonTitle()
+    {
+        return $this->addButtonTitle;
+    }
+
+    /**
+     * @param mixed $addButtonTitle
+     * @return DataTableEngine
+     */
+    public function setAddButtonTitle(string $addButtonTitle)
+    {
+        $this->addButtonTitle = $addButtonTitle;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string|null $id
+     */
+    public function setId(?string $id): void
+    {
+        $this->id = $id;
+    }
+
     public function setTableRowEntity(EntityInterface $tableRowEntity): DataTableEngine
     {
         $this->tableRowEntity = $tableRowEntity;
         return $this;
     }
 
-    /**
-     * @return AbstractEntity
-     */
     public function getTableRowEntity(): EntityInterface
     {
+
         return $this->tableRowEntity;
     }
 
+    public function loadFormEntity(int $id = null): ?EntityInterface
+    {
+        if(!$id){
+            if(!$id = $this->getCriteria()->getFilterById()){
+                return null;
+            }
+        }
 
+        if(!$result = $this->getRepo()->findByCriteria(
+            $this->getCriteria()->setFilterById($id)->setPage(0)
+        )->current()){
+            return null;
+        }
+
+        return $result;
+    }
 
     /**
      * @return mixed
@@ -383,6 +510,18 @@ class DataTableEngine
         return $this;
     }
 
+    /**
+     * Добавление колонки
+     *
+     * @param ColumnTable $column
+     * @return $this
+     */
+    public function addFirstColumn(ColumnTable $column): self
+    {
+        $this->columns = array_merge([$column],$this->columns);
+        return $this;
+    }
+
     public function setClass(string $class): self
     {
         $this->class = $class;
@@ -470,6 +609,12 @@ class DataTableEngine
         return $this;
     }
 
+    public function setFormTemplate(string $template): DataTableEngine
+    {
+        $this->formTemplate = $template;
+        return $this;
+    }
+
     /**
      * @param FormControlRenderInterface $field
      */
@@ -477,6 +622,14 @@ class DataTableEngine
         FormControlRenderInterface $field, bool $require = false,
         string $caption = null, string $help = null, array $validations = []): DataTableEngine
     {
+
+        if($this->makeTab !== null){
+            $this->tabs[$this->makeTab][]=$field->getName();
+        }
+
+        if($this->makeFieldGroup !== null){
+            $this->fieldGroups[$this->makeFieldGroup][]=$field->getName();
+        }
 
         $control = (new FormField($field))
             ->setRequire($require)
@@ -486,7 +639,7 @@ class DataTableEngine
 
         $fields = $this->fields;
 
-        //tесли уже есть контрол, переопределим его
+        //если уже есть контрол, переопределим его
         foreach ($fields as $k => $fieldExist) {
             if ($field->getName() === $fieldExist->getControl()->getName()) {
                 $this->fields[$k] = $control;
@@ -714,6 +867,14 @@ class DataTableEngine
     {
         $this->fieldsWidth = $fieldsWidth;
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFormTemplate(): ?string
+    {
+        return $this->formTemplate;
     }
 
 }
