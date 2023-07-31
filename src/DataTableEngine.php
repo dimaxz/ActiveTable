@@ -292,7 +292,7 @@ class DataTableEngine
         return $this;
     }
 
-    public function getTableRowEntity(): EntityInterface
+    public function getTableRowEntity(): ?EntityInterface
     {
 
         return $this->tableRowEntity;
