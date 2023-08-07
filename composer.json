@@ -3,11 +3,11 @@
 	"description": "ActiveTable Engine, grid+form",
 	"minimum-stability": "dev",
 	"require": {
-        "php": "^7.2",
-		"dimaxz/repository": "dev-master"
+        "php": "^8.0",
+		"dimaxz/repository": "dev-reliase-2.0"
     },
 	"require-dev": {
-		"phpunit/phpunit"	: "7.3.*",
+		"phpunit/phpunit"	: "9.5.*",
 		"symfony/var-dumper":"*"
 	},
 	"autoload": {
